@@ -25,8 +25,27 @@ const array2D = [
     [7, 8, 9]
 ];
 
-const sumPromise1 = sum2DArray(array2D);
-console.log('sumPromise1:', sumPromise1);
+sum2DArray(array2D)
+    .then(sum => console.log('sumPromise1', sum))
+    .catch(err => console.error('Error:', err));
 
-const sumPromise2 = sum2DArray([]);
-console.log('sumPromise2:', sumPromise2);
+sum2DArray([])
+    .then(sum => console.log('sumPromise2', sum))
+    .catch(err => console.error('Error:', err));
+
+/*
+- When sum2DArray(array2D) is called, it logs "Sum called ..." immediately.
+- It checks if the array is empty and since it's not, it skips the rejection.
+- setTimeout is set up, which will execute the summation after the current
+  call stack is clear.
+- "returning from sum" is logged immediately after setting up the timeout.
+- The timeout function is now waiting to execute.
+- The same sequence occurs for sum2DArray([]):
+        - Logs "Sum called ..."
+        - Finds the array empty
+        - Then rejects with the error "Error: Cannot sum an empty array".
+- After the current stack is cleared, the timeout function executes, logs
+  the addition of each element to the sum, and eventually resolves the sum.
+- The resolved values or error messages are handled by the .then() and .catch()
+  callbacks. The results are logged after the asynchronous operations complete.
+ */
